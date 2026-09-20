@@ -1,0 +1,926 @@
+{
+  "meta": {
+    "version": "1.0",
+    "created": "2026-09-20T00:00:00Z",
+    "framework": "MATLAB Cycle-Mythos with Novel Findings Engine",
+    "total_findings": 32,
+    "clusters": 8,
+    "epistemic_statuses": ["MACHINE_CHECKED", "VERIFIED_COMPUTATIONAL", "VERIFIED_FORMAL", "AXIOM", "CLAIMED", "OPEN"]
+  },
+  "clusters": {
+    "A": {
+      "name": "Secure Adaptive Parameter Plane",
+      "description": "Cycle-stealing scheduling with DMA/CPU synchronization",
+      "findings": [
+        {
+          "id": "A1",
+          "title": "Cycle-Stealing MoE Expert Weight Update",
+          "status": "CLAIMED",
+          "mechanism": "2000-cycle inference window with 8 DMA channels and 8 expert pairs",
+          "mathematical_objects": [
+            "cycle_ledger",
+            "dma_schedule",
+            "expert_dispatch",
+            "encrypted_weight_transport",
+            "decryption_boundary"
+          ],
+          "equations": [
+            "cycle_utilization = allocated / total",
+            "dma_occupancy = active_channels / 8",
+            "expert_dispatch(t) = schedule[t mod 8]"
+          ],
+          "parameters": {
+            "cycle_window": 2000,
+            "cpu_dma_region": [1300, 2000],
+            "dma_channels": 8,
+            "expert_pairs": 8
+          },
+          "invariants": ["I1_cycle_conservation", "I2_nonnegative_balance", "I6_latency_bound"],
+          "open_obligations": [],
+          "implementation": "runtime/A1_cycle_stealing_moe.m",
+          "tests": "tests/test_A1_cycle_stealing_moe.m",
+          "verification": "verification/A1_report.mat",
+          "novelty_class": "SCHEDULING"
+        },
+        {
+          "id": "A2",
+          "title": "Three-Level Cycle-Stealing Hierarchy",
+          "status": "CLAIMED",
+          "mechanism": "6502 control plane / DMA-RISC-V plane / quantum-classical scheduling",
+          "mathematical_objects": [
+            "control_plane_6502",
+            "dma_risc_v_plane",
+            "quantum_classical_scheduler",
+            "schedule_handoff"
+          ],
+          "equations": [
+            "schedule_conflict(p1, p2) = overlap(timeline_p1, timeline_p2)",
+            "handoff_latency <= max_allowed"
+          ],
+          "parameters": {
+            "planes": 3,
+            "control_instructions": 256,
+            "max_handoff_latency_cycles": 50
+          },
+          "invariants": ["I3_queue_integrity", "I6_latency_bound"],
+          "open_obligations": ["OB_schedule_deadlock_free", "OB_handoff_correctness"],
+          "implementation": "runtime/A2_three_level_hierarchy.m",
+          "tests": "tests/test_A2_hierarchy.m",
+          "verification": "verification/A2_report.mat",
+          "novelty_class": "SCHEDULING"
+        },
+        {
+          "id": "A3",
+          "title": "6502 Quantum Result Decoder",
+          "status": "VERIFIED_COMPUTATIONAL",
+          "mechanism": "1024 measurement indices, 2-byte measurements, 100,000 schedule entries",
+          "mathematical_objects": [
+            "measurement_vector",
+            "agent_templates",
+            "decoded_schedule",
+            "distribution_verification"
+          ],
+          "equations": [
+            "672*98 + 352*97 = 100000",
+            "total_decoded_entries = measurement_count"
+          ],
+          "parameters": {
+            "measurement_indices": 1024,
+            "measurement_bytes": 2,
+            "agent_template_bytes": 8,
+            "schedule_entries": 100000,
+            "distribution_672_98": "672 × 98",
+            "distribution_352_97": "352 × 97"
+          },
+          "invariants": ["I9_candidate_integrity"],
+          "open_obligations": [],
+          "implementation": "runtime/A3_quantum_decoder.m",
+          "tests": "tests/test_A3_decoder.m",
+          "verification": "verification/A3_report.mat",
+          "novelty_class": "QUANTUM_INTERFACE"
+        },
+        {
+          "id": "A4",
+          "title": "PUF + PCR Key Derivation",
+          "status": "CLAIMED",
+          "mechanism": "PUF response + PCR vector + KDF for key binding",
+          "mathematical_objects": [
+            "puf_response",
+            "pcr_vector",
+            "key_derivation_function",
+            "derived_key",
+            "key_binding_verification"
+          ],
+          "equations": [
+            "derived_key = KDF(puf_response || pcr_vector || salt)",
+            "entropy_min >= 128 bits"
+          ],
+          "parameters": {
+            "puf_response_bits": 256,
+            "pcr_vector_bits": 256,
+            "salt_bits": 128,
+            "kdf_iterations": 100000
+          },
+          "invariants": ["I2_nonnegative_balance"],
+          "open_obligations": ["OB_hardware_puf_isolation", "OB_pcr_measurement_binding"],
+          "implementation": "runtime/A4_puf_pcr_kdf.m",
+          "tests": "tests/test_A4_puf_pcr.m",
+          "verification": "verification/A4_report.mat",
+          "novelty_class": "HARDWARE_SECURITY"
+        }
+      ]
+    },
+    "B": {
+      "name": "Geometric Algebra",
+      "description": "Clifford algebra (Cl(3,0)) operations, rotors, SO(3) reductions",
+      "findings": [
+        {
+          "id": "B1",
+          "title": "Rotor-Based Computation in Cl(3,0)",
+          "status": "VERIFIED_COMPUTATIONAL",
+          "mechanism": "Clifford algebra vectors, bivectors, rotors with reverse and rotor-action",
+          "mathematical_objects": [
+            "clifford_algebra_3",
+            "vector_3",
+            "bivector_3",
+            "rotor",
+            "reverse_operation",
+            "rotor_action"
+          ],
+          "equations": [
+            "R = cos(θ/2) + sin(θ/2)*B̂",
+            "v' = R * v * reverse(R)",
+            "|R| = 1"
+          ],
+          "parameters": {
+            "algebra": "Cl(3,0)",
+            "signature": "(+,+,+)",
+            "basis_vectors": 3,
+            "multivector_grade_max": 3
+          },
+          "invariants": ["I2_nonnegative_balance"],
+          "open_obligations": [],
+          "implementation": "runtime/B1_clifford_rotor.m",
+          "tests": "tests/test_B1_rotor.m",
+          "verification": "verification/B1_report.mat",
+          "novelty_class": "GEOMETRIC_ALGEBRA"
+        },
+        {
+          "id": "B2",
+          "title": "GKA/HSP Security Reduction",
+          "status": "CLAIMED",
+          "mechanism": "Reduction from Group Key Agreement to Hidden Subgroup Problem",
+          "mathematical_objects": [
+            "gka_adversary",
+            "hsp_adversary",
+            "reduction_transform",
+            "security_loss_factor"
+          ],
+          "equations": [
+            "Adv_HSP(A) >= Adv_GKA(B) / loss_factor",
+            "loss_factor <= 2^k"
+          ],
+          "parameters": {
+            "group_order": null,
+            "hidden_subgroup_size": null,
+            "security_parameter": 128
+          },
+          "invariants": [],
+          "open_obligations": ["OB_reduction_soundness", "OB_reduction_tightness"],
+          "implementation": "runtime/B2_gka_hsp_reduction.m",
+          "tests": "tests/test_B2_reduction.m",
+          "verification": "verification/B2_report.mat",
+          "novelty_class": "CRYPTOGRAPHIC_REDUCTION"
+        },
+        {
+          "id": "B3",
+          "title": "Hamiltonian Schedule Evolution",
+          "status": "CLAIMED",
+          "mechanism": "H(K) = Σ K[i] * bivector_i with time evolution",
+          "mathematical_objects": [
+            "hamiltonian_operator",
+            "bivector_basis",
+            "time_evolution_operator",
+            "rotor_trajectory"
+          ],
+          "equations": [
+            "H(K) = Σ_i K[i] * B_i",
+            "U(t) = exp(-i*H*t)",
+            "|U(t)| = 1"
+          ],
+          "parameters": {
+            "bivector_count": 3,
+            "time_steps": 100,
+            "time_max": 2*3.14159265358979
+          },
+          "invariants": ["I2_nonnegative_balance"],
+          "open_obligations": ["OB_unitarity_preservation"],
+          "implementation": "runtime/B3_hamiltonian_evolution.m",
+          "tests": "tests/test_B3_hamiltonian.m",
+          "verification": "verification/B3_report.mat",
+          "novelty_class": "GEOMETRIC_DYNAMICS"
+        },
+        {
+          "id": "B4",
+          "title": "Projective Cross-Ratio Commitment",
+          "status": "CLAIMED",
+          "mechanism": "Cross-ratio in projective geometry as commitment",
+          "mathematical_objects": [
+            "projective_point",
+            "cross_ratio",
+            "commitment_value",
+            "verification_proof"
+          ],
+          "equations": [
+            "CR(P1,P2;P3,P4) = (P1-P3)/(P1-P4) * (P2-P4)/(P2-P3)"
+          ],
+          "parameters": {
+            "field": "GF(p)",
+            "projective_dim": 2,
+            "point_count": 4
+          },
+          "invariants": [],
+          "open_obligations": ["OB_binding", "OB_hiding", "OB_collision_resistance"],
+          "implementation": "runtime/B4_cross_ratio_commitment.m",
+          "tests": "tests/test_B4_commitment.m",
+          "verification": "verification/B4_report.mat",
+          "novelty_class": "GEOMETRIC_CRYPTOGRAPHY"
+        },
+        {
+          "id": "B5",
+          "title": "Sylvester Matrix Resultant Signature",
+          "status": "VERIFIED_COMPUTATIONAL",
+          "mechanism": "Resultant computation via Sylvester determinant",
+          "mathematical_objects": [
+            "sylvester_matrix",
+            "polynomial_pair",
+            "resultant_value",
+            "signature_output"
+          ],
+          "equations": [
+            "Res(P,Q) = det(Sylvester(P,Q))",
+            "Res(P,Q) mod p = signature"
+          ],
+          "parameters": {
+            "polynomial_degree_max": 256,
+            "field_characteristic": "p = 2^256 - 2^32 - 977",
+            "modulus": "p"
+          },
+          "invariants": [],
+          "open_obligations": [],
+          "implementation": "runtime/B5_resultant_signature.m",
+          "tests": "tests/test_B5_resultant.m",
+          "verification": "verification/B5_report.mat",
+          "novelty_class": "ALGEBRAIC_SIGNATURE"
+        }
+      ]
+    },
+    "C": {
+      "name": "AES Mathematical Work",
+      "description": "Finite field operations, differential cryptanalysis, algebraic analysis",
+      "findings": [
+        {
+          "id": "C1",
+          "title": "GF(256) Log-Gauge Quotient",
+          "status": "CLAIMED",
+          "mechanism": "Logarithmic gauge normalization in GF(256)",
+          "mathematical_objects": [
+            "gf256_field",
+            "log_table",
+            "antilog_table",
+            "gauge_function",
+            "quotient_representation"
+          ],
+          "equations": [
+            "Q_g(X) = (Z(X), log_g(X_nonzero) - γ(X)·1)",
+            "g = 0x03, order = 255",
+            "γ = 64*(e1+e2+e3+e4) mod 255",
+            "4*64 mod 255 = 1",
+            "gcd(4, 255) = 1"
+          ],
+          "parameters": {
+            "field_size": 256,
+            "primitive_element": 3,
+            "field_order": 255,
+            "gauge_parameter": 64
+          },
+          "invariants": [],
+          "open_obligations": ["OB1_gauge_closure", "OB2_representation_uniqueness", "OB3_operation_preservation"],
+          "implementation": "runtime/C1_gf256_log_gauge.m",
+          "tests": "tests/test_C1_log_gauge.m",
+          "verification": "verification/C1_report.mat",
+          "novelty_class": "FINITE_FIELD_ALGEBRA"
+        },
+        {
+          "id": "C2",
+          "title": "AES Differential Trail Search",
+          "status": "VERIFIED_COMPUTATIONAL",
+          "mechanism": "Independent trail search in AES with active S-box tracking",
+          "mathematical_objects": [
+            "differential_trail",
+            "active_sbox_count",
+            "column_indicators",
+            "trail_weight"
+          ],
+          "equations": [
+            "weight = Σ active_sboxes"
+          ],
+          "parameters": {
+            "rounds": 10,
+            "sbox_per_round": 16,
+            "min_active_sboxes": 25
+          },
+          "invariants": [],
+          "open_obligations": [],
+          "implementation": "runtime/C2_aes_trail_search.m",
+          "tests": "tests/test_C2_trail_search.m",
+          "verification": "verification/C2_report.mat",
+          "novelty_class": "DIFFERENTIAL_CRYPTANALYSIS"
+        },
+        {
+          "id": "C3",
+          "title": "10-Round AES Terminal Analysis",
+          "status": "CLAIMED",
+          "mechanism": "Terminal round algebraic degree and Jacobian rank analysis",
+          "mathematical_objects": [
+            "active_sbox_count",
+            "algebraic_degree",
+            "key_schedule_dimension",
+            "jacobian_rank",
+            "jacobian_matrix"
+          ],
+          "equations": [
+            "deg(terminal_polynomial) = 8^rounds",
+            "rank(Jacobian) = min(input_dim, output_dim)"
+          ],
+          "parameters": {
+            "rounds": 10,
+            "terminal_round": 10,
+            "state_bytes": 16,
+            "key_bytes": 32
+          },
+          "invariants": [],
+          "open_obligations": ["OB_degree_bound", "OB_rank_calculation", "OB_key_schedule_dimension"],
+          "implementation": "runtime/C3_aes_terminal_analysis.m",
+          "tests": "tests/test_C3_terminal.m",
+          "verification": "verification/C3_report.mat",
+          "novelty_class": "ALGEBRAIC_CRYPTANALYSIS"
+        },
+        {
+          "id": "C4",
+          "title": "Autonomous Discovery Analysis",
+          "status": "OPEN",
+          "mechanism": "Reproducibility framework for discovery process verification",
+          "mathematical_objects": [
+            "discovery_trajectory",
+            "candidate_mechanism",
+            "verification_checkpoint",
+            "discovery_event"
+          ],
+          "equations": [],
+          "parameters": {
+            "search_depth": null,
+            "candidate_count": null,
+            "verification_steps": null
+          },
+          "invariants": [],
+          "open_obligations": ["OB_reproducibility_from_artifacts"],
+          "implementation": "runtime/C4_discovery_analysis.m",
+          "tests": "tests/test_C4_discovery.m",
+          "verification": "verification/C4_report.mat",
+          "novelty_class": "META_ANALYSIS"
+        }
+      ]
+    },
+    "D": {
+      "name": "E7 and Invariant Theory",
+      "description": "E7 exceptional group, FTS56 representation, I4 invariant",
+      "findings": [
+        {
+          "id": "D1",
+          "title": "E7 Exceptional Symmetries",
+          "status": "AXIOM",
+          "mechanism": "E7 root system and Weyl chamber representation",
+          "mathematical_objects": [
+            "e7_root_system",
+            "e7_weyl_group",
+            "e7_chamber",
+            "e7_generators"
+          ],
+          "equations": [
+            "|Φ_E7| = 126 roots",
+            "|W(E7)| = 2903040"
+          ],
+          "parameters": {
+            "rank": 7,
+            "root_count": 126,
+            "weyl_group_order": 2903040
+          },
+          "invariants": [],
+          "open_obligations": [],
+          "implementation": "runtime/D1_e7_symmetries.m",
+          "tests": "tests/test_D1_e7.m",
+          "verification": "verification/D1_report.mat",
+          "novelty_class": "LIE_THEORY"
+        },
+        {
+          "id": "D2",
+          "title": "I4 Homogeneity Verification",
+          "status": "CLAIMED",
+          "mechanism": "Verification that I4(r*z) = r^4 * I4(z)",
+          "mathematical_objects": [
+            "i4_invariant",
+            "scaling_factor",
+            "homogeneous_degree"
+          ],
+          "equations": [
+            "I4(r*z) = r^4 * I4(z)"
+          ],
+          "parameters": {
+            "homogeneous_degree": 4,
+            "scaling_factors": [0.5, 0.9, 1.0, 1.1, 2.0, 10.0]
+          },
+          "invariants": [],
+          "open_obligations": [],
+          "implementation": "runtime/D2_i4_homogeneity.m",
+          "tests": "tests/test_D2_i4.m",
+          "verification": "verification/D2_report.mat",
+          "novelty_class": "INVARIANT_THEORY"
+        },
+        {
+          "id": "D3",
+          "title": "QKD → I4 Chain Theorem",
+          "status": "AXIOM",
+          "mechanism": "Toeplitz privacy amplification to AEAD to I4 state",
+          "mathematical_objects": [
+            "toeplitz_matrix",
+            "privacy_amplification",
+            "aead_state",
+            "i4_state",
+            "security_parameter"
+          ],
+          "equations": [
+            "|I4(Ψ_secure) - I4(Ψ_uniform)| <= ε_sec * Lipschitz",
+            "ε_sec = negl(λ)"
+          ],
+          "parameters": {
+            "security_parameter": 128,
+            "privacy_amplification_rounds": 256,
+            "lipschitz_constant": null
+          },
+          "invariants": [],
+          "open_obligations": ["OB_lipschitz_bound", "OB_negligibility"],
+          "implementation": "runtime/D3_qkd_i4_chain.m",
+          "tests": "tests/test_D3_qkd_i4.m",
+          "verification": "verification/D3_report.mat",
+          "novelty_class": "QUANTUM_CRYPTOGRAPHY"
+        },
+        {
+          "id": "D4",
+          "title": "Boolean Formalization",
+          "status": "VERIFIED_FORMAL",
+          "mechanism": "Formalization of boolean operations in Lean 4 with decidable instances",
+          "mathematical_objects": [
+            "boolean_algebra",
+            "decidable_equality",
+            "canonical_form"
+          ],
+          "equations": [
+            "a ∨ (a ∧ b) = a",
+            "a ∧ (a ∨ b) = a"
+          ],
+          "parameters": {
+            "variables": 3,
+            "canonical_normal_form": "DNF"
+          },
+          "invariants": [],
+          "open_obligations": [],
+          "implementation": "runtime/D4_boolean_formalization.m",
+          "tests": "tests/test_D4_boolean.m",
+          "verification": "verification/D4_report.mat",
+          "novelty_class": "FORMAL_LOGIC"
+        }
+      ]
+    },
+    "E": {
+      "name": "Epistemic Verification Framework",
+      "description": "Epistemic state machine, witness generation, JWT evolution",
+      "findings": [
+        {
+          "id": "E1",
+          "title": "QLG/SLA/QRA Framework",
+          "status": "CLAIMED",
+          "mechanism": "Quantum Linear Gauge / Semantic Logic Architecture / Quantum Representation Algebra",
+          "mathematical_objects": [
+            "quantum_linear_gauge",
+            "semantic_logic_architecture",
+            "quantum_representation_algebra"
+          ],
+          "equations": [],
+          "parameters": {},
+          "invariants": [],
+          "open_obligations": [],
+          "implementation": "runtime/E1_qlg_sla_qra.m",
+          "tests": "tests/test_E1_qlg.m",
+          "verification": "verification/E1_report.mat",
+          "novelty_class": "META_FRAMEWORK"
+        },
+        {
+          "id": "E2",
+          "title": "Epistemic Witness Generation",
+          "status": "VERIFIED_COMPUTATIONAL",
+          "mechanism": "Runtime witness generation with hash chaining and state sealing",
+          "mathematical_objects": [
+            "witness_record",
+            "hash_chain",
+            "state_hash",
+            "blake3_seal"
+          ],
+          "equations": [
+            "witness_hash = Blake3(finding_id || input_hash || output_hash || timestamp)"
+          ],
+          "parameters": {
+            "hash_algorithm": "Blake3",
+            "hash_length_bits": 256
+          },
+          "invariants": [],
+          "open_obligations": [],
+          "implementation": "runtime/E2_epistemic_witness.m",
+          "tests": "tests/test_E2_witness.m",
+          "verification": "verification/E2_report.mat",
+          "novelty_class": "VERIFICATION_INFRASTRUCTURE"
+        },
+        {
+          "id": "E3",
+          "title": "JWT Witness Evolution",
+          "status": "VERIFIED_COMPUTATIONAL",
+          "mechanism": "Finite state evolution of 3-tuple witness states over Σ={-1,0,+1}",
+          "mathematical_objects": [
+            "witness_state",
+            "state_transition",
+            "transition_graph",
+            "absorbing_states"
+          ],
+          "equations": [
+            "w' = [Q(w0,w1), Q(w1,w2), Q(w2,w0)]",
+            "T <= 36 (maximum transient length)"
+          ],
+          "parameters": {
+            "alphabet": [-1, 0, 1],
+            "tuple_size": 3,
+            "max_transient_length": 36
+          },
+          "invariants": [],
+          "open_obligations": [],
+          "implementation": "runtime/E3_jwt_evolution.m",
+          "tests": "tests/test_E3_jwt.m",
+          "verification": "verification/E3_report.mat",
+          "novelty_class": "FINITE_STATE_SYSTEMS"
+        },
+        {
+          "id": "E4",
+          "title": "QAL (Quantum Approximation Limit)",
+          "status": "CLAIMED",
+          "mechanism": "Parametrized quantum approximation with generation and seal protocol",
+          "mathematical_objects": [
+            "f_rep",
+            "f_mut",
+            "generation_count",
+            "prime_layers",
+            "prime_seal"
+          ],
+          "equations": [],
+          "parameters": {
+            "f_rep": null,
+            "f_mut": null,
+            "generation_count": null,
+            "prime_layers": null
+          },
+          "invariants": [],
+          "open_obligations": ["OB_parameter_specification", "OB_prime_seal_binding"],
+          "implementation": "runtime/E4_qal.m",
+          "tests": "tests/test_E4_qal.m",
+          "verification": "verification/E4_report.mat",
+          "novelty_class": "QUANTUM_SYSTEMS"
+        }
+      ]
+    },
+    "F": {
+      "name": "Hardware Runtime Simulation",
+      "description": "6502, PTX, proof DAG, bootstrap sequence",
+      "findings": [
+        {
+          "id": "F1",
+          "title": "Hybrid Proof DAG with Timing Constraints",
+          "status": "CLAIMED",
+          "mechanism": "DAG of proof nodes with cycle-accurate timing and proof-token dependencies",
+          "mathematical_objects": [
+            "proof_dag_node",
+            "proof_token",
+            "cycle_budget",
+            "critical_path",
+            "wall_clock_time"
+          ],
+          "equations": [
+            "critical_path = max(path_lengths)",
+            "constraint: 575 <= 1000 cycles"
+          ],
+          "parameters": {
+            "node_count": null,
+            "cycle_budget": 1000,
+            "critical_path_max": 575
+          },
+          "invariants": ["I6_latency_bound"],
+          "open_obligations": ["OB_dag_acyclic", "OB_proof_token_flow"],
+          "implementation": "runtime/F1_proof_dag.m",
+          "tests": "tests/test_F1_dag.m",
+          "verification": "verification/F1_report.mat",
+          "novelty_class": "HARDWARE_SIMULATION"
+        },
+        {
+          "id": "F2",
+          "title": "Deterministic Boot Gate",
+          "status": "CLAIMED",
+          "mechanism": "Bootstrap sequence with deterministic state initialization",
+          "mathematical_objects": [
+            "boot_state",
+            "initialization_vector",
+            "deterministic_seed",
+            "gate_output"
+          ],
+          "equations": [],
+          "parameters": {
+            "state_size": 32,
+            "deterministic_seed": 42
+          },
+          "invariants": ["I5_determinism"],
+          "open_obligations": ["OB_determinism_preservation"],
+          "implementation": "runtime/F2_boot_gate.m",
+          "tests": "tests/test_F2_boot.m",
+          "verification": "verification/F2_report.mat",
+          "novelty_class": "DETERMINISM_INFRASTRUCTURE"
+        },
+        {
+          "id": "F3",
+          "title": "Taylor TQC Braid Generator",
+          "status": "VERIFIED_COMPUTATIONAL",
+          "mechanism": "Taylor expansion of U(θ) with Yang-Baxter verification",
+          "mathematical_objects": [
+            "taylor_expansion",
+            "braid_matrix",
+            "unitarity_verification",
+            "yang_baxter_residual"
+          ],
+          "equations": [
+            "U(θ) = Σ(k=0..8) (iθ)^k/k!",
+            "Yang-Baxter residual < 1e-8"
+          ],
+          "parameters": {
+            "taylor_order": 8,
+            "yang_baxter_threshold": 1e-8
+          },
+          "invariants": [],
+          "open_obligations": [],
+          "implementation": "runtime/F3_taylor_tqc.m",
+          "tests": "tests/test_F3_taylor_tqc.m",
+          "verification": "verification/F3_report.mat",
+          "novelty_class": "TOPOLOGICAL_QUANTUM"
+        },
+        {
+          "id": "F4",
+          "title": "Watson Identity Correction",
+          "status": "VERIFIED_COMPUTATIONAL",
+          "mechanism": "Numerical demonstration of incorrect vs corrected Watson identity sequence",
+          "mathematical_objects": [
+            "watson_sequence_incorrect",
+            "watson_sequence_corrected",
+            "scaling_factor",
+            "error_measure"
+          ],
+          "equations": [
+            "incorrect_result = 0.75*x",
+            "corrected_result = 1.0*x"
+          ],
+          "parameters": {
+            "test_values": [-10, -1, 0, 1, 10, 100],
+            "scale_incorrect": 0.75,
+            "scale_corrected": 1.0
+          },
+          "invariants": [],
+          "open_obligations": [],
+          "implementation": "runtime/F4_watson_identity.m",
+          "tests": "tests/test_F4_watson.m",
+          "verification": "verification/F4_report.mat",
+          "novelty_class": "IDENTITY_VERIFICATION"
+        }
+      ]
+    },
+    "G": {
+      "name": "Security Hardening",
+      "description": "Key commitment, invocation limits, hash policies",
+      "findings": [
+        {
+          "id": "G1",
+          "title": "AEAD Key Commitment Protocol",
+          "status": "CLAIMED",
+          "mechanism": "Key commitment binding for AEAD ciphertexts",
+          "mathematical_objects": [
+            "commitment_value",
+            "key_binding_proof",
+            "collision_resistance"
+          ],
+          "equations": [],
+          "parameters": {
+            "key_size_bits": 256,
+            "nonce_size_bits": 128,
+            "tag_size_bits": 128
+          },
+          "invariants": [],
+          "open_obligations": ["OB_binding", "OB_hiding", "OB_collision_search"],
+          "implementation": "runtime/G1_aead_key_commitment.m",
+          "tests": "tests/test_G1_aead.m",
+          "verification": "verification/G1_report.mat",
+          "novelty_class": "CRYPTOGRAPHIC_HARDENING"
+        },
+        {
+          "id": "G2",
+          "title": "Invocation Limit Boundary Testing",
+          "status": "VERIFIED_COMPUTATIONAL",
+          "mechanism": "Testing of invocation limits at 2^32 boundary",
+          "mathematical_objects": [
+            "invocation_counter",
+            "limit_value",
+            "boundary_case",
+            "overflow_behavior"
+          ],
+          "equations": [
+            "limit = 2^32"
+          ],
+          "parameters": {
+            "limit": 4294967296,
+            "test_cases": [4294967295, 4294967296, 4294967297]
+          },
+          "invariants": [],
+          "open_obligations": [],
+          "implementation": "runtime/G2_invocation_limit.m",
+          "tests": "tests/test_G2_invocation.m",
+          "verification": "verification/G2_report.mat",
+          "novelty_class": "BOUNDARY_TESTING"
+        },
+        {
+          "id": "G3",
+          "title": "SHA3-512 Policy Enforcement",
+          "status": "CLAIMED",
+          "mechanism": "Policy-driven hash selection and verification",
+          "mathematical_objects": [
+            "hash_policy",
+            "sha3_512_output",
+            "policy_compliance"
+          ],
+          "equations": [
+            "output_length = 512 bits"
+          ],
+          "parameters": {
+            "hash_algorithm": "SHA3-512",
+            "output_bits": 512
+          },
+          "invariants": [],
+          "open_obligations": ["OB_policy_compliance"],
+          "implementation": "runtime/G3_sha3_policy.m",
+          "tests": "tests/test_G3_sha3.m",
+          "verification": "verification/G3_report.mat",
+          "novelty_class": "POLICY_ENFORCEMENT"
+        }
+      ]
+    },
+    "H": {
+      "name": "Open Proof Obligations",
+      "description": "Unsolved mathematical obligations with active falsification harnesses",
+      "findings": [
+        {
+          "id": "H1",
+          "title": "Möbius Proof Obligations",
+          "status": "OPEN",
+          "mechanism": "Three unproved hypotheses in Möbius transformation family",
+          "mathematical_objects": [
+            "mobius_transformation",
+            "fixed_points",
+            "cross_ratio_invariance"
+          ],
+          "equations": [
+            "m(z) = (az+b)/(cz+d), ad-bc ≠ 0"
+          ],
+          "parameters": {
+            "obligation_count": 3
+          },
+          "invariants": [],
+          "open_obligations": ["OB1_fixed_point_bound", "OB2_iteration_convergence", "OB3_conjugacy_classification"],
+          "implementation": "runtime/H1_mobius_obligations.m",
+          "tests": "tests/test_H1_mobius.m",
+          "verification": "verification/H1_report.mat",
+          "counterexample_search": "verification/counterexamples/H1_falsification.m",
+          "novelty_class": "OPEN_MATHEMATICS"
+        },
+        {
+          "id": "H2",
+          "title": "I4 Full State Theorem",
+          "status": "OPEN",
+          "mechanism": "Completeness of I4 invariant as full state descriptor",
+          "mathematical_objects": [
+            "i4_invariant",
+            "state_reconstruction",
+            "distinguishability"
+          ],
+          "equations": [
+            "I4(z1) = I4(z2) ⟹ distinguishable ?"
+          ],
+          "parameters": {
+            "space_dimension": null
+          },
+          "invariants": [],
+          "open_obligations": ["OB_sufficiency_of_i4"],
+          "implementation": "runtime/H2_i4_full_state.m",
+          "tests": "tests/test_H2_i4_state.m",
+          "verification": "verification/H2_report.mat",
+          "counterexample_search": "verification/counterexamples/H2_falsification.m",
+          "novelty_class": "OPEN_MATHEMATICS"
+        },
+        {
+          "id": "H3",
+          "title": "QKD → I4 Chain Completeness",
+          "status": "OPEN",
+          "mechanism": "Proof obligation that QKD security chains to I4 property",
+          "mathematical_objects": [
+            "qkd_security",
+            "i4_property",
+            "chain_validity"
+          ],
+          "equations": [
+            "QKD_secure(λ) ⟹ I4_property(λ) ?"
+          ],
+          "parameters": {
+            "security_parameter": 128
+          },
+          "invariants": [],
+          "open_obligations": ["OB_chain_sufficiency", "OB_loss_bounds"],
+          "implementation": "runtime/H3_qkd_i4_chain_open.m",
+          "tests": "tests/test_H3_qkd_chain.m",
+          "verification": "verification/H3_report.mat",
+          "counterexample_search": "verification/counterexamples/H3_falsification.m",
+          "novelty_class": "OPEN_MATHEMATICS"
+        },
+        {
+          "id": "H4",
+          "title": "MixColumns Linearity Over GF(2)",
+          "status": "OPEN",
+          "mechanism": "Whether MixColumns preserves linearity structure over GF(2)",
+          "mathematical_objects": [
+            "mixcolumns_matrix",
+            "gf2_linear_structure",
+            "linearity_preservation"
+          ],
+          "equations": [
+            "MC(x ⊕ y) = MC(x) ⊕ MC(y) over GF(2) ?"
+          ],
+          "parameters": {
+            "state_bytes": 4,
+            "field": "GF(2)"
+          },
+          "invariants": [],
+          "open_obligations": ["OB_linearity_structure"],
+          "implementation": "runtime/H4_mixcolumns_linearity.m",
+          "tests": "tests/test_H4_mixcolumns.m",
+          "verification": "verification/H4_report.mat",
+          "counterexample_search": "verification/counterexamples/H4_falsification.m",
+          "novelty_class": "OPEN_MATHEMATICS"
+        }
+      ]
+    }
+  },
+  "epistemic_machine": {
+    "states": ["MACHINE_CHECKED", "VERIFIED_COMPUTATIONAL", "VERIFIED_FORMAL", "AXIOM", "CLAIMED", "OPEN"],
+    "transitions": {
+      "OPEN": ["CLAIMED", "OPEN"],
+      "CLAIMED": ["VERIFIED_COMPUTATIONAL", "AXIOM", "OPEN"],
+      "VERIFIED_COMPUTATIONAL": ["MACHINE_CHECKED", "VERIFIED_COMPUTATIONAL"],
+      "VERIFIED_FORMAL": ["MACHINE_CHECKED", "VERIFIED_FORMAL"],
+      "AXIOM": ["AXIOM"],
+      "MACHINE_CHECKED": ["MACHINE_CHECKED"]
+    },
+    "transition_requirements": {
+      "OPEN_to_CLAIMED": "Initial hypothesis formulation",
+      "CLAIMED_to_VERIFIED_COMPUTATIONAL": "Passing computational tests without falsification",
+      "CLAIMED_to_AXIOM": "Treating as foundational assumption",
+      "VERIFIED_COMPUTATIONAL_to_MACHINE_CHECKED": "Formal proof artifact",
+      "VERIFIED_FORMAL_to_MACHINE_CHECKED": "Formal proof in proof assistant"
+    }
+  },
+  "implementation_manifest": {
+    "total_runtimes": 32,
+    "total_test_files": 32,
+    "total_verification_reports": 32,
+    "counterexample_search_required": 4,
+    "sas_verification_required": 10,
+    "epistemic_status_updates": "On-demand only. Never fabricate status transitions."
+  }
+}

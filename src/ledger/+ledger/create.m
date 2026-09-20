@@ -35,7 +35,41 @@ function ledger = create(totalCycles, config)
     % === Validation State ===
     ledger.conservationViolations = 0;
     ledger.negativeBalanceViolations = 0;
+    ledger.accountingViolations = 0;
     ledger.invalidTransfers = 0;
+
+    % === Error Tracking ===
+    ledger.lastError = '';
+    ledger.errorHistory = {};
+    ledger.eventLogFull = false;
+
+    % === Flow Accounting Sums ===
+    % Track total cycles flowing through each operation type for analysis
+    ledger.systemDepletionSum = 0;      % Total allocated from system
+    ledger.kernelConsumptionSum = 0;    % Total consumed by kernels
+    ledger.returnToSystemSum = 0;       % Total returned to system
+
+    % === Underflow/Overflow Tracking ===
+    ledger.underflowAttempts = 0;       % Attempts to consume/transfer beyond balance
+    ledger.doubleAllocationAttempts = 0; % Attempts to over-allocate per worker
+    ledger.partialReturnFailures = 0;   % Failed return operations
+
+    % === Zero-Operation Counts ===
+    % Track no-op operations for optimization detection
+    ledger.zeroAllocations = 0;
+    ledger.zeroConsumptions = 0;
+    ledger.zeroTransfers = 0;
+    ledger.zeroReturns = 0;
+    ledger.selfTransfers = 0;
+
+    % === Per-Worker Return Tracking ===
+    % Track cycles returned by each worker (complements consumed/stolen/received)
+    ledger.workerReturned = zeros(config.workerCount, 1);
+
+    % === Allocation History ===
+    % Track allocation records for deactivation on consumption/return
+    ledger.allocationHistory = [];
+    ledger.maxConcurrentAllocPerWorker = 16;  % Safety limit
 
     % === Metadata ===
     ledger.creationTime = datetime('now');
@@ -44,7 +78,7 @@ function ledger = create(totalCycles, config)
     ledger.config = config;
 
     % === Internal State ===
-     ledger.isValid = true;
+    ledger.isValid = true;
     ledger.lastValidationTime = datetime('now');
 
 end
