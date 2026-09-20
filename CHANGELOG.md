@@ -226,8 +226,8 @@ All notable changes to the MATLAB Cycle-Stealing and Recursive Mythos Framework.
 
 - GitHub Issues: Bug reports and feature requests
 - Documentation: See docs/ directory
-- Quick Start: See QUICKSTART.md
-- Development: See DEVELOPMENT.md
+- Quick Start: See [QUICKSTART.md](docs/guides/QUICKSTART.md)
+- Development: See [DEVELOPMENT.md](docs/guides/DEVELOPMENT.md)
 
 ### Citation
 

@@ -19,8 +19,8 @@ keywords:
   - MATLAB
 version: 0.1.0
 date-released: 2026-09-19
-url: "https://github.com/SNAPKITTYWEST/matlab-cycle-mythos"
-repository-code: "https://github.com/SNAPKITTYWEST/matlab-cycle-mythos"
+url: "https://github.com/SNAPKITTYWEST/Claude-Mythos-Cycle-Stealing"
+repository-code: "https://github.com/SNAPKITTYWEST/Claude-Mythos-Cycle-Stealing"
 license:
   - BSD-3-Clause
   - GPL-1.0
