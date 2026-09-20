@@ -1,0 +1,33 @@
+cff-version: 1.2.0
+title: MATLAB Cycle-Stealing and Recursive Mythos Framework
+type: software
+authors:
+  - family-names: Research
+    given-names: SNAPKITTY
+    affiliation: SNAPKITTYWEST
+abstract: >
+  A deterministic, instrumented experimental framework for studying
+  cycle-stealing schedulers, recursive control, and Mythos candidate
+  exploration in MATLAB.
+keywords:
+  - cycle-stealing
+  - scheduling
+  - resource-allocation
+  - recursive-exploration
+  - determinism
+  - reproducibility
+  - MATLAB
+version: 0.1.0
+date-released: 2026-09-19
+url: "https://github.com/SNAPKITTYWEST/matlab-cycle-mythos"
+repository-code: "https://github.com/SNAPKITTYWEST/matlab-cycle-mythos"
+license:
+  - BSD-3-Clause
+  - GPL-1.0
+notes: >
+  This project is dual-licensed under BSD-3-Clause OR GPL-1.0.
+  Users may select either license at their option.
+references:
+  - type: website
+    title: "MATLAB Documentation"
+    url: "https://www.mathworks.com/help/matlab/"
